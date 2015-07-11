@@ -1,85 +1,110 @@
 // start slingin' some d3 here.
 
 
+//if we detect collision -> two objects overlap
+  //up collision count by 1
+  //stop detection colissions until they don't overlap
+
+
+
+
 //build the game area
 d3.select('body').append('svg').attr('class', 'game-area');
 var playerXY = {x:400,y:300};
-
-// console.log(player);
+var colisionCount = 0;
+var currentScore = 0;
+var highScore = 0;
 
 var checkCollision = function () {
-  // var userX = d3.select('.player')[0][0]['cx']['baseVal']['value'];
-  // var userY = d3.select('.player')[0][0]['cy']['baseVal']['value'];
   var userX = playerXY.x;
   var userY = playerXY.y;
-  // console.log('running');
-  // player[0][0].cx.baseVal.value
-  // player[0][0]['cx']['baseVal']['value']
   var enemyCoordinate = d3.select('svg').selectAll('.enemy');
-  // console.log('in for loop');
-  // console.log(enemyCoordinate);
   for(var i = 0; i < enemyCoordinate[0].length; i++){
-    // console.log('checking');
     var tempX = Math.pow((userX - enemyCoordinate[0][i].__data__.cx) , 2);
     var tempY = Math.pow((userY - enemyCoordinate[0][i].__data__.cy) , 2);
     var temp = tempX + tempY;
-    // console.log(tempX - tempY);
-    if(Math.sqrt(temp) < 20 ){
-      console.log('Collission');
+    if(Math.sqrt(temp) < 40 && currentScore > 0){
+      //increase collision count
+      colisionCount++;
+      d3.select('.collisions').select('span').text(colisionCount);
+      console.log('Collision');
+      currentScore = 0;
+      return;
+    }
+    else{
+      increaseScore();
     }
   }
 }
+
+function increaseScore(){
+  currentScore++;
+  d3.select('.current').select('span').text(currentScore);
+  if(currentScore > highScore){
+    d3.select('.high').select('span').text(currentScore);
+    highScore = currentScore;
+  }
+}
 var drag = d3.behavior.drag()  
-             .on('dragstart', function() { player.style('fill', 'blue');
-                // checkCollision(d3.select('svg').selectAll('.enemy'));
-              })
+             .on('dragstart', function() { 
+                                            setInterval(checkCollision, 100);
+                                          })
              .on('drag', function() { player.attr('cx', d3.event.x)
-                                            .attr('cy', d3.event.y); 
-                                            // checkCollision(d3.select('svg').selectAll('.enemy'));
+                                            .attr('cy', d3.event.y)
+                                            .attr('x', d3.event.x)
+                                            .attr('y', d3.event.y);
+
                                       playerXY.x = d3.event.x;
                                       playerXY.y = d3.event.y;
-                                            // console.log(enemyCoordinate[0][1].__data__.cx);
                                      })
-             .on('dragend', function() { player.style('fill', 'red'); 
-                // checkCollision(d3.select('svg').selectAll('.enemy'));
-              });
-
-var player = d3.select('svg').append('svg').attr('class', 'player').append('circle')
+             .on('dragend', function() {});
+ 
+var player = d3.select('svg').append('svg').attr('class', 'player').append('image')
                   .attr("cx", 400)
                   .attr("cy", 300)
-                  .attr("r", 20)
-                  .attr("fill", 'red' )
+                  .attr("r", 40)
+                  .attr("xlink:href", "img/penguin.png")
+                  .attr("width", 80)
+                  .attr("height", 80)
+                  .attr("x", 400)
+                  .attr("y", 300)
+                  // .attr("fill", 'red' )
                   .call(drag);    
 
 
 function update(){
   var storageArray = [];
-  for (var i = 0; i < 1; i++){
-    var x = Math.random()*800;
-    var y = Math.random()*600;
+  for (var i = 0; i < 20; i++){
+    var x = Math.random()*1400;
+    var y = Math.random()*800;
     var enemyCoordinate = {
       cx : x,
       cy : y,
     };
     storageArray.push(enemyCoordinate);
   }
+
   var existing = d3.select('svg').selectAll('.enemy').data(storageArray);
-  existing.enter().append('circle')
+  existing.enter().append('image')
                   .attr('class', 'enemy');
-  existing.transition().duration(1000)
+  existing.transition().duration(500)
                   .attr("cx", function(d) { return d.cx; })
                   .attr("cy", function(d) { return d.cy; })
-                  .attr("r", 10);  
+                  .attr("x", function(d) { return d.cx; })
+                  .attr("y", function(d) { return d.cy; })
+                  .attr("xlink:href", "img/polarBear.png")
+                  .attr("width", 80)
+                  .attr("height", 80)
+                  .attr("r", 40); 
+  // var existing = d3.select('svg').selectAll('.enemy').data(storageArray);
+  // existing.enter().append('circle')
+  //                 .attr('class', 'enemy');
+  // existing.transition().duration(500)
+  //                 .attr("cx", function(d) { return d.cx; })
+  //                 .attr("cy", function(d) { return d.cy; })
+  //                 .attr("r", 20);  
 
-  // checkCollision(d3.select('svg').selectAll('.enemy'));                           
 }
-
-setInterval(checkCollision, 10);
-
+// setInterval(increaseScore, 500);
+// setInterval(checkCollision, 100);
 setInterval(update, 1000);
-
-
-//Make a differently-colored dot to represent the player. Make it draggable.
-//Detect when a enemy touches you.
-//Keep track of the user's score, and display it.
-//Use css3 animations to make the enemies whirling shuriken.

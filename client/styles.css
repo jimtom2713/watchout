@@ -4,18 +4,27 @@
 Feel free to use it if you like. */
 body {
   align: center;
+  width: 100%;
+  height: 100%;
+  background: url(img/iceberg.jpg) no-repeat center center fixed;
+  background-size: cover;
 }
 
 .game-area {
   display: block;
   margin: auto;
-  height:600px;
-  width:800px;
-  background-color: yellow;
+  /*height:600px;*/
+  /*width:1000px;*/
+  height: 800px;
+  width: 1400px;
+  /*background-color: yellow;*/
+  background: url(img/iceberg.jpg) no-repeat center center fixed;
+  /*background: url(img/iceberg.jpg);*/
+  background-size: cover;
 }
 
 .player{
-  color: red;
+  background-image: url(img/penguin.png);
 }
 .enemy {
   /*transition: 1s;*/
