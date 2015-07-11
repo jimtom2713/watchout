@@ -2,4 +2,30 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
+body {
+  align: center;
+}
 
+.game-area {
+  display: block;
+  margin: auto;
+  height:600px;
+  width:800px;
+  background-color: yellow;
+}
+
+.enemy {
+  /*transition: 1s;*/
+/*  position: relative;*/
+/*  cx: 60;
+  cy: 60;
+  r: 50;*/
+  /*background-color: red;*/
+  /*color: red;*/
+}
+
+/*  <svg viewBox="0 0 120 120" version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="50"/>
+  </svg>*/
+/*make button class for scores and collision counts*/
