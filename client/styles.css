@@ -14,6 +14,9 @@ body {
   background-color: yellow;
 }
 
+.player{
+  color: red;
+}
 .enemy {
   /*transition: 1s;*/
 /*  position: relative;*/
